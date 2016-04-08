@@ -1,0 +1,43 @@
+ol {
+    font-size: 30px;
+}
+
+ol > li{
+	margin-top: 10px;
+}
+
+.mod_buttons{
+	margin-top: 20px;
+}
+
+math{
+    font-family: inherit;
+    font-size: 30px;
+}
+/*
+.section {        
+    position:relative;
+    z-index:1;
+    height:500px;
+    width:100%;
+    background-attachment:fixed;    
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+}
+
+.content {
+    position:relative;
+    z-index:2;
+    background-color:#fff;
+    border:1px solid #eee;    
+    height:50%;     
+}
+
+.section#s1 {
+    background-image: url(http://farm4.staticflickr.com/3290/3090990005_1177611ccb_o.jpg);   
+}
+
+.section#s2 {
+    background-image: url(http://farm5.staticflickr.com/4135/4820238049_8e830ec494_b.jpg);
+}
+/*/

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Transpositions and Modulations</title>
+  <link rel="stylesheet" type="text/css" href="css/mathml.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+  <style type="text/css">
+    ol{
+      font-size: 30px;
+    }
+    body{
+      padding: 20px;
+    }
+  </style>
+
+  <!-- Bootstrap core CSS -->
+  <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+
+</head>
+<body ng-app="modulationApp" ng-controller="modulationCntrl">
+  <div ng-repeat="modulation in modulations">
+    <h1>Modulation from I to {{modulation.target_interval}}</h1>
+
+    <h3>An interval of
+      <span ng-repeat="interval in getInterval(modulation.intervals)">
+        {{interval.prefix + " " + interval.distance}}
+        <span ng-if="!$last"> / </span>
+      </span>
+    </h3>
+    
+    <ol>
+      <li ng-repeat="progression in getProgression(modulation.progressions)">
+        <span ng-repeat="chord in progression.chords.chord">
+          <math>
+            <mtext ng-if="!chord.hasOwnProperty('bass_note')">{{chord.chord_name}}</mtext>
+            <mfrac ng-if="chord.hasOwnProperty('bass_note')">
+              <mtext>{{chord.chord_name}}</mtext>
+              <mtext>{{chord.bass_note}}</mtext>
+            </mfrac>
+            <mtext ng-if="!$last">
+              &nbsp;
+              <span ng-if="!isKeyChangePoint(progression.swap_point, $index)" class="glyphicon glyphicon-arrow-right"> </span>
+              <span ng-if="isKeyChangePoint(progression.swap_point, $index)" class="glyphicon glyphicon-random"> </span>
+              &nbsp;
+            </mtext>
+          </math>
+        </span>
+      </li>
+    </ol>
+  </div>
+</body>
+<script src="javascript/modulations.js"></script>
+</html>

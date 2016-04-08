@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Transpositions and Modulations</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" type="text/css" href="css/sticky-footer.css">
+    <link rel="stylesheet" type="text/css" href="css/modulation.css">
+
+    <!-- jQuery and AngularJS libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+
+    <!-- Application JavaScript files -->
+  </head>
+
+  <body ng-app="modulationApp" ng-controller="navCntrl">
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">T &amp; M</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li ng-repeat="option in navOptions" ng-class="{active: $index == bigCurSelected}">
+              <a href="#" ng-click="bigNavClick('body_item' + $index)">{{option}}</a>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div id="body_item0" class="container">
+      <div class="jumbotron">
+        <h1>Transpositions and Modulations</h1>
+        <p ng-controller="modulationCntrl">During the Sunday mornings that I played preliminary music for my church, I found it somewhat difficult to move from a song of a certain key (Eg: C major) to a song of another key (Eg: F&#9839; major). So starting from my summer break in 2014, I started compiling a list of modulations from a base key to a target key. Currently I have {{getNumberOfProgressions()}} recorded progressions, and this will continue to grow as I encounter, analyze and utilize transpositions and modulations from other pieces of music.</p>
+        <p>In the meantime, feel free to peruse the current library and bookmark this page! Most of the progressions recorded are taken from other sources of music. Feel free to utilize these progressions in your music making! &#128521; So, enjoy!</p>
+        <p>To understand the basics of how to use this website and the modulations, click the "Usage" tab above.</p>
+      </div>
+
+      <p>
+        <blockquote>
+          <p>Bless the Lord, O my soul;</p>
+          <p>And all that is within me, bless His holy name!</p>
+          <footer>Psalm 103:1</footer>
+        </b>
+    </div> <!-- home container -->
+
+    <div id="body_item1" class="container hidden">
+      <h1>About Michael Kong</h1>
+      <blockquote>
+        <p>He must increase, but I must decrease.</p>
+        <footer>John 3:30</footer>
+      </blockquote>
+
+      <section class="section text-left">
+        <h3>Contact Me</h3>
+      </section>
+      <p><abbr title="Email">E:</abbr> <a href="mailto:michael@beermogul.com">michael@beermogul.com</a></p>
+    </div> <!-- about container -->
+
+    <div id="body_item2" class="container hidden">
+      <h1>Modulations and Transpositions</h1>
+
+      <div ng-controller="modulationCntrl">
+        <nav class="text-center mod_buttons">
+          <h4>Select a target interval: </h4>
+          <ul class="pagination pagination-lg">
+            <li ng-repeat="modulation in modulations" ng-class="{active: $index == smallCurSelected}">
+              <a href="{{'#modulation' + $index}}" ng-click="smallNavClick($index)" role="tab" data-toggle="tab">{{modulation.target_interval}}</a>
+            </li>
+          </ul>
+        </nav>
+        <!-- mod_buttons end -->
+
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane" ng-class="{active: $index == smallCurSelected}" id="{{'modulation' + $index}}" ng-repeat="modulation in modulations">
+
+            <h2>Modulations from I to {{modulation.target_interval}}</h2>
+
+            <h4>An interval of
+              <span ng-repeat="interval in getInterval(modulation.intervals)">
+                <span ng-if="$first">{{getArticle(interval.prefix)}} </span>
+                {{interval.prefix + " " + interval.distance}}<sup>{{getOrdinal(interval.distance)}}</sup>
+                <span ng-if="!$last"> / </span>
+              </span>
+            </h4>
+
+            <p ng-if="!hasProgression(modulation.progressions)">There are no progressions for this modulation yet. Check back soon and we just might!</p>
+
+            <ol>
+              <li ng-repeat="progression in getProgression(modulation.progressions)">
+                <span ng-repeat="chord in progression.chords.chord">
+                  <math>
+                    <mtext ng-if="!chord.hasOwnProperty('bass_note')">{{chord.chord_name}}</mtext>
+                    <mfrac ng-if="chord.hasOwnProperty('bass_note')">
+                      <mtext>{{chord.chord_name}}</mtext>
+                      <mtext>{{chord.bass_note}}</mtext>
+                    </mfrac>
+                    <mtext ng-if="!$last">
+                      &nbsp;
+                      <span ng-if="!isKeyChangePoint(progression.swap_point, $index)" class="glyphicon glyphicon-arrow-right"></span>
+                      <span ng-if="isKeyChangePoint(progression.swap_point, $index)" class="glyphicon glyphicon-random"></span>
+                      &nbsp;
+                    </mtext>
+                  </math>
+                </span>
+              </li>
+            </ol>
+
+          </div> <!-- ng-repeat="modulation in modulations" tabpanel -->
+        </div> <!-- tab-content div -->
+
+      </div> <!-- modulationCntrl end -->
+    </div> <!-- stuff container -->
+
+    <div id="body_item3" class="container hidden">
+      <h1>Website Usage</h1>
+      <h3>Brief Introduction</h3>
+      <p>The notation that is used on this website is a mix of the traditional Roman numerals used in music theory used to represent chords along with two types of arrows to demonstrate the progression of the chords and when the change in key happens. You may ask, "Why did you use this notation?" The simple answer is: This is the first thing that popped into my head when I was writing these progressions down in a notebook as I was listening to the music.</p>
+
+      <hr>
+
+      <h3>Notation Proper</h3>
+      <p>In the notation, there are two types of elements with two subtypes each. 
+      </p>
+
+      <ul>
+        <li><h4>Chords</h4>
+          <p>If you don't know what these are, may I suggest a <a href="https://en.wikipedia.org/wiki/Chord_(music)">Wikipedia page on chords</a> to start you off. &#128513;</p>
+          <ul>
+              <li><h5>Simple chords</h5>
+                <p>An example of a simple chord is shown below:</p>
+                <math>
+                  <mtext>IV</mtext>
+                </math>
+                <p>This means play the subdominant chord of the key. In non-musical jargon, this means to play chord 4 of the key.</p>
+              </li>
+              <li><h5>Inversion chords</h5>
+                <p>An example of an inversion chord is shown below:</p>
+                <math>
+                  <mfrac>
+                    <mtext>V</mtext>
+                    <mtext>I</mtext>
+                  </mfrac>
+                </math>
+                <p>This means play the dominant chord of the key with the tonic note of the key in the bass. In non-musical jargon, this means to play chord 5 of the key with the 1<sup>st</sup> note of the key.</p>
+              </li>
+            </ul>
+          </li>
+          <li><h4>Arrows</h4>
+            <p>The arrows in the notation basically show the flow from one chord to another.</p>
+            <ul>
+              <li><h5>Next arrow</h5>
+                <p>The next arrow looks like this:</p>
+                <math>
+                  <mtext>
+                    <span class="glyphicon glyphicon-arrow-right"></span>
+                  </mtext>
+                </math>
+                <p>This means that the preceding chord and the following chord belong to the same key.</p>
+              </li>
+              <li><h5>Modulate arrow</h5>
+                <p>The modulate arrow looks like this:</p>
+                <math>
+                  <mtext>
+                    <span class="glyphicon glyphicon-random"></span>
+                  </mtext>
+                </math>
+                <p>This means that the preceding chord is in the first key and the following chord is in the target key to modulate to.</p>
+              </li>
+            </ul>
+          </li>
+      </ul>
+    </div> <!-- about container -->
+                      
+    <footer class="footer">
+      <div class="text-muted text-center">
+        <p>Copyright &copy; 2015</p>
+        <p>Built with <a href="http://getbootstrap.com/">Bootstrap</a></p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="javascript/mspace.js"></script>
+    <script src="javascript/modulations.js"></script>
+  </body>
+</html>
